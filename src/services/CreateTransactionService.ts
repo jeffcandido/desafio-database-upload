@@ -17,18 +17,12 @@ class CreateTransactionService {
     type,
     category,
   }: Request): Promise<Transaction> {
-    console.log(`Request no Service: ${title}, ${value}, ${type}, ${category}`);
     const categoriesRepository = getRepository(Category);
     const transactionsRepository = getCustomRepository(TransactionRepository);
-
-    console.log(`categoriesRepository: ${categoriesRepository}`);
-    console.log(`categoriesRepository: ${transactionsRepository}`);
 
     const transactionWithSameCategory = await categoriesRepository.findOne({
       where: { title: category },
     });
-
-    console.log(`transactionWithSameCategory: ${transactionWithSameCategory}`);
 
     if (transactionWithSameCategory) {
       const transaction = transactionsRepository.create({
@@ -48,10 +42,6 @@ class CreateTransactionService {
     });
 
     await categoriesRepository.save(transactionCategory);
-
-    console.log(
-      `transactionCategory: ${transactionCategory.id}, ${transactionCategory.title}, ${transactionCategory.created_at}`,
-    );
 
     const transaction = transactionsRepository.create({
       title,
